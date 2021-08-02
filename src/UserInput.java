@@ -6,6 +6,7 @@ public class UserInput implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		Renderer.scale*= 0.5;
+		System.out.println(Renderer.scale);
 		
 		Renderer.position.setLocation(
 				Renderer.position.x + (e.getX() - Main.renderer.getWidth()/2) *Renderer.scale,

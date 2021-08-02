@@ -69,7 +69,7 @@ public class Renderer extends JPanel {
 						canvas.setRGB(x + width / 2, y + height / 2, Color.HSBtoRGB((float) maxIteration / 100f, 1, 1));
 				}
 			}
-			render = false;
+			//render = false;
 		}
 		
 		g2.drawImage(canvas, null, null);

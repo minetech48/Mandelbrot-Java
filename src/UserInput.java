@@ -12,11 +12,19 @@ public class UserInput implements MouseListener, KeyListener {
 		Renderer.oldScale = Renderer.scale;
 		Renderer.oldPosition.setLocation(Renderer.position);
 		
-		Renderer.position.setLocation(
-				Renderer.position.x + (e.getX() - Main.display.getWidth()/2) *Renderer.scale,
-				Renderer.position.y + (e.getY() - Main.display.getHeight()/2) *Renderer.scale
-		);
-		Renderer.scale*= 0.2;
+		if (e.getButton() == 1) {
+			Renderer.position.setLocation(
+					Renderer.position.x + (e.getX() - Main.display.getWidth() / 2) * Renderer.scale,
+					Renderer.position.y + (e.getY() - Main.display.getHeight() / 2) * Renderer.scale
+			);
+			Renderer.scale *= 0.2;
+		}else if (e.getButton() == 3)  {
+			Renderer.position.setLocation(
+					Renderer.position.x - (e.getX() - Main.display.getWidth() / 2) * Renderer.scale,
+					Renderer.position.y - (e.getY() - Main.display.getHeight() / 2) * Renderer.scale
+			);
+			Renderer.scale /= 0.2;
+		}
 		
 		System.out.println(Renderer.scale);
 		

@@ -53,13 +53,10 @@ public class Display extends JPanel {
 	}
 	
 	public void render() {
-		Renderer.render();
-		
 		Renderer.oldCanvas = Renderer.canvas;
 		Renderer.canvas = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 		
-		Renderer.oldScale = Renderer.scale;
-		Renderer.oldPosition.setLocation(Renderer.position);
+		Renderer.render();
 	}
 	
 	public void paint(Graphics g) {

@@ -9,6 +9,9 @@ public class UserInput implements MouseListener, KeyListener {
 	public void mouseClicked(MouseEvent e) {}
 	
 	public void mousePressed(MouseEvent e) {
+		Renderer.oldScale = Renderer.scale;
+		Renderer.oldPosition.setLocation(Renderer.position);
+		
 		Renderer.position.setLocation(
 				Renderer.position.x + (e.getX() - Main.display.getWidth()/2) *Renderer.scale,
 				Renderer.position.y + (e.getY() - Main.display.getHeight()/2) *Renderer.scale
@@ -52,6 +55,8 @@ public class UserInput implements MouseListener, KeyListener {
 		if (repaint) {
 			System.out.println(Renderer.maxIterations);
 			
+			Renderer.oldScale = Renderer.scale;
+			Renderer.oldPosition.setLocation(Renderer.position);
 			Main.display.render();
 		}
 	}

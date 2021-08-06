@@ -18,6 +18,8 @@ public class Renderer extends Thread {
 	private static int ZoneCountX = 16, ZoneCountY = 16;
 	private static ArrayList<Renderer> renderThreads;
 	
+	private static boolean init;
+	
 	private int width, height, startX, startY;
 	private boolean running = true;
 	
@@ -38,11 +40,15 @@ public class Renderer extends Thread {
 		int width = canvas.getWidth()/ZoneCountX;
 		int height = canvas.getHeight()/ZoneCountY;
 		
-		for (Renderer renderer : renderThreads) {
-			renderer.end();
+		if (init) {
+			for (Renderer renderer : renderThreads) {
+				renderer.end();
+			}
+			renderThreads.clear();
+			threadCount = 0;
+		}else {
+			init();
 		}
-		renderThreads.clear();
-		threadCount = 0;
 		
 		for (int x = 0; x < ZoneCountX; x++) {
 			for (int y = 0; y < ZoneCountY; y++) {

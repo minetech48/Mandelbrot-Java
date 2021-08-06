@@ -12,7 +12,7 @@ public class Renderer extends Thread {
 	
 	public static int cornerOffsetX, cornerOffsetY;
 	
-	static int maxIterations = 500;
+	static int maxIterations = 1000;
 	
 	private static int maxThreads = 8, threadCount;
 	private static int ZoneCountX = 16, ZoneCountY = 16;

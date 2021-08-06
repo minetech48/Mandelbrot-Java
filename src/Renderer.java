@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-public class Renderer extends Thread {
+public class Renderer implements Runnable {
 	public static BufferedImage canvas, oldCanvas;
 	
 	public static double scale = 0.002, oldScale = scale;
@@ -14,9 +16,10 @@ public class Renderer extends Thread {
 	
 	static int maxIterations = 500;
 	
-	private static int maxThreads = 8, threadCount;
 	private static int ZoneCountX = 16, ZoneCountY = 16;
 	private static ArrayList<Renderer> renderThreads;
+	
+	private static ScheduledExecutorService executor;
 	
 	private static boolean init;
 	
@@ -28,12 +31,12 @@ public class Renderer extends Thread {
 		this.width = width;
 		this.startY = startY;
 		this.height = height;
-		
-		this.start();
 	}
 	
 	public static void init() {
 		renderThreads = new ArrayList<>(ZoneCountX * ZoneCountY);
+		
+		executor = Executors.newScheduledThreadPool(1);
 	}
 	
 	public static void render() {
@@ -43,30 +46,25 @@ public class Renderer extends Thread {
 		if (init) {
 			for (Renderer renderer : renderThreads) {
 				renderer.end();
+				executor.shutdownNow();
 			}
-			renderThreads.clear();
-			threadCount = 0;
 		}else {
 			init();
 		}
 		
+		Renderer renderer;
+		
 		for (int x = 0; x < ZoneCountX; x++) {
 			for (int y = 0; y < ZoneCountY; y++) {
-				renderThreads.add(new Renderer(width * x, width * (x + 1), height * y, height * (y + 1)));
+				renderer = new Renderer(width * x, width * (x + 1), height * y, height * (y + 1));
+				
+				renderThreads.add(renderer);
+				executor.execute(renderer);
 			}
 		}
 	}
 	
 	public void run() {
-		//waiting for available thread
-		while (threadCount > maxThreads) {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		threadCount++;
 		
 		Point2D.Double z, c;
 		z = new Point2D.Double(0, 0);
@@ -103,8 +101,6 @@ public class Renderer extends Thread {
 			if (!running)
 				break;
 		}
-		
-		threadCount--;
 	}
 	
 	public void end() {
